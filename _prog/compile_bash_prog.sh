@@ -4,11 +4,13 @@ _compile_bash_deps_prog() {
 
 #Default is to include all, or run a specified configuration. For this reason, it will be more typical to override this entire function, rather than append any additional code.
 # WARNING Find current version of this function at "build/bash/compile_bash.sh"
-# _compile_bash_deps() {
-# 	[[ "$1" == "lean" ]] && return 0
-# 	
-# 	false
-# }
+_compile_bash_deps() {
+	_deps_stopwatch
+	
+	_deps_virt
+	
+	#false
+}
 
 _vars_compile_bash_prog() {
 	#export configDir="$scriptAbsoluteFolder"/_config
@@ -107,6 +109,10 @@ _compile_bash_installation_prog() {
 
 _compile_bash_program_prog() {	
 	export includeScriptList
+	
+	includeScriptList+=( 'core_wmctrl.sh' )
+	includeScriptList+=( 'core_xrandr.sh' )
+	
 	true
 }
 
