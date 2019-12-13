@@ -2,9 +2,9 @@ Copyright (C) 2019 mirage335
 See the end of the file for license conditions.
 See license.txt for PanelBoard license conditions.
 
-Simulator/Vehicle Panel/Kneeboard computer window placement script.
+Simulator/Vehicle Panel/Kneeboard computer window placement/switching standard/script for VR/AR panels.
 
-Scripted window placement functions intended for dedicated/virtual machines used as limited document/map/data readers for VR/AR panels.
+Scripted window placement/switching functions intended for dedicated/virtual machines used as limited document/map/data readers for VR/AR panels.
 
 
 Inspired by the benefits of physical printed paper. Specifically intended to replicate, with arbitrary applications, the flexibility of paper, pen, folding, tabbing, printing, and scanning, for paperless VR/AR environments. Under VR/AR equipment, a user's own hands may not be visible, and any available input/pointing keyboard/mouse device may need to remain connected to more essential systems as often as possible.
