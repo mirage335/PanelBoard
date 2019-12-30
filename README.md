@@ -204,6 +204,8 @@ Additionally serves as reference implemenation for similar window placement proj
 * Pure Wayland support.
 * KWin Scripting alternative to use of Bash/wmctrl.
 
+* PDF reader keybindings to mark and goto tabbed bookmarks.
+
 
 # Reference
 
