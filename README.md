@@ -189,6 +189,10 @@ Fallbacks to other display inputs may be triggered automatically, for example, f
 
 Disks should be nonpersistent, with less critical large datasets stored on separate nonpersistent disk, to allow rapid recovery from faults.
 
+Filesystems should be local only, due to possibility of file manager problems.
+
+Reboots should be carefully structured for minimum startup time. Less than 12 seconds preferred.
+
 Internal voice commands must not conflict with other voice recognition systems that may be running. Repeatability and efficiency are also important.
 
 
