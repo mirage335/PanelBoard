@@ -250,6 +250,10 @@ https://www.aes-eu.com/datasheets/sdk/SD-EDM-datasheet.pdf
 
 
 
+https://www.domoticz.com/wiki/Setting_up_overlayFS_on_Raspberry_Pi
+
+
+
 __Copyright__
 This file is part of PanelBoard.
 
