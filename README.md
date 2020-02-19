@@ -47,17 +47,17 @@ Physical desktop computer (or virtual machine) contains an interface divided int
 Quick desktop should be visually equivalent to a typical tabbed IDE interface.
 
 ```
-01-quick	Specifically named files and folders. File manager driven.
-02-plates	Predetermined approach plates. File manager driven.
+01-quick*	Specifically named files and folders. File manager driven.
+02-plates*	Predetermined approach plates. File manager driven.
 
-03-cruise	Cruising waypoints. Spreadsheets. Calculators.
+03-cruise**	Cruising waypoints. Spreadsheets. Calculators.
 
 04-fusion	Combined synthetic rendering (typically single window rendered framebuffer). Redundant AR HUD/HMD on/off toggle switch.
 05-synthetic	Map, SyntheticVision, Traffic Collision Avoidance, Infrared, Radar, Weather.
 06-nav		Horizontal Situation Indicator, Orbital Parameters.
 
 
-07-video	Video. Kodi, XBMC.
+07-material	Video. Kodi, XBMC. External weather reports.
 08-media	Media, Lighting, Climate.
 09-transceiver	Radio/Transponder Channel/Mode, File/Image Digital Modem.
 
@@ -66,15 +66,17 @@ Quick desktop should be visually equivalent to a typical tabbed IDE interface.
 12-report	Reports (Fuel, Positioning Sources, Structural Integrity, Instrument Status, Maintenance).
 
 
-13-startup	Startup Procedures.
-14-emergency	Emergency Procedures.
-15-scripted	Scripted Communications.
+13-startup**	Startup Procedures.
+14-emergency**	Emergency Procedures.
+15-scripted**	Scripted Communications.
 
-16-instruments	Instruments (in case of other display failure).
+16-instruments	Instruments (in case of other display, fusion, or synthetic, failure).
 17-integration	Embedded Links (USB Drive Mounting, Keyboard/Mouse Sharing).
 18-admin	Admin (daemon, computer resource consumption).
 ```
 
+*Marked desktops default to continious window placement by '_panel_place_loop'.
+**Marked desktops are recommended to be used with window placement by '_panel_place_app' and similar.
 Not all desktops will typically be populated.
 
 
@@ -88,7 +90,7 @@ Intended to roughly resemble a simple layout usable for complex development work
 05-Task2	File manager driven, typically.
 06-Task2
 
-07-Video
+07-Material
 08-Media
 09-Messaging
 10-Mail
@@ -131,13 +133,13 @@ Not all voice commands will typically be enabled.
 ## Indicators
 
 * Clock must be visible at all times and include seconds indicator to demonstrate display is continuing to update.
-* Autopilot (of any kind) ON/OFF indicator should be included on taskbar if relevant data is available.
+* Autopilot (of any kind) ON/OFF indicator should be included on taskbar at all times if relevant data is available.
 
 
 
 # Recommended
 
-* webClient - Provides methods to launch multiple instances of web browsers each with file parameters recognizable in window lists.
+* webClient - Provides methods to launch multiple instances of filesystem and web browsers, each with file parameters recognizable in window lists.
 
 
 # Design
