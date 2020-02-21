@@ -333,18 +333,20 @@ _panel_place_activate_app_currentDesk() {
 		then
 			_messagePlain_good 'matched: file parameters'
 			
-			# ATTENTION: Update with any other required workarounds.
+			# ATTENTION: Update with any other workarounds required to prevent mismatch of a different application with matching file parameters (typically matching a konsole window instead of a file manager).
 			if [[ "$current_arg1" == *"dolphin"* ]]
 			then
-				if [[ "$current_wmctrl_args" != "$current_arg1"* ]] && [[ "$current_wmctrl_args" != "_dolphin_"* ]] && [[ "$current_wmctrl_args" != "_dolphin"* ]] && [[ "$current_wmctrl_args" != "_fsClient"* ]]
+				if [[ "$current_wmctrl_args" != "$current_arg1"* ]] && [[ "$current_arg1" != *"_dolphin"* ]] && [[ "$current_arg1" != *"_fsClient"* ]]
 				then
-					_messagePlain_warn 'workaround: partial match'
+					_messagePlain_warn 'workaround: partial match: dolphin'
 					continue
 				fi
 			fi
-			[[ "$current_arg1" == *"konsole"* ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
+			[[ "$current_arg1" == *"konsole"* ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match: konsole' && continue
 			
-			[[ -d "$current_arg2" ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
+			[[ -d "$current_arg2" ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && [[ "$current_wmctrl_args" != *"dolphin"* ]] && [[ "$current_arg1" != *"_dolphin"* ]] && [[ "$current_arg1" != *"_fsClient"* ]] && _messagePlain_warn 'workaround: partial match: directory' && continue
+			
+			
 			[[ "$current_arg2" == "$ubiquitiousBashID"_doNotMatch ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'reject: "$ubiquitiousBashID"_doNotMatch' && continue
 			
 			_messagePlain_good 'accept...'
