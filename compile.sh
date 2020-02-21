@@ -138,6 +138,7 @@ else	#FAIL, implies [[ "$ub_import" == "true" ]]
 fi
 
 #Override.
+# DANGER: Recursion hazard. Do not create overrides without checking that alternate exists.
 
 # WARNING: Only partially compatible.
 if ! type md5sum > /dev/null 2>&1 && type md5 > /dev/null 2>&1
@@ -155,6 +156,30 @@ fi
 #		md5sum "$@"
 #	}
 #fi
+
+
+# WARNING: DANGER: Compatibility may not be guaranteed!
+if ! type unionfs-fuse > /dev/null 2>&1 && type unionfs > /dev/null 2>&1 && man unionfs | grep 'unionfs-fuse - A userspace unionfs implementation' > /dev/null 2>&1
+then
+	unionfs-fuse() {
+		unionfs "$@"
+	}
+fi
+
+if ! type qemu-arm-static > /dev/null 2>&1 && type qemu-arm > /dev/null 2>&1
+then
+	qemu-arm-static() {
+		qemu-arm "$@"
+	}
+fi
+
+if ! type qemu-armeb-static > /dev/null 2>&1 && type qemu-armeb > /dev/null 2>&1
+then
+	qemu-armeb-static() {
+		qemu-armeb "$@"
+	}
+fi
+
 
 #Override (Program).
 
@@ -2936,6 +2961,12 @@ _deps_blockchain() {
 _deps_image() {
 	_deps_notLean
 	_deps_machineinfo
+	
+	# DANGER: Required for safety mechanisms which may also be used by some other virtualization backends!
+	# _deps_image
+	# _deps_chroot
+	# _deps_vbox
+	# _deps_qemu
 	export enUb_image="true"
 }
 
@@ -2949,6 +2980,13 @@ _deps_virt_thick() {
 
 _deps_virt() {
 	_deps_machineinfo
+	
+	# WARNING: Includes 'findInfrastructure_virt' which may be a dependency of multiple virtualization backends.
+	# _deps_image
+	# _deps_chroot
+	# _deps_vbox
+	# _deps_qemu
+	# _deps_docker
 	export enUb_virt="true"
 }
 
@@ -3050,6 +3088,13 @@ _deps_channel() {
 
 _deps_stopwatch() {
 	export enUb_stopwatch="true"
+}
+
+# WARNING: Specifically refers to 'Linux', the kernel, and things specific to it, NOT any other UNIX like features.
+# WARNING: Beware Linux shortcut specific dependency programs must not be required, or will break other operating systems!
+# ie. _test_linux must not require Linux-only binaries
+_deps_linux() {
+	export enUb_linux="true"
 }
 
 #placeholder, define under "metaengine/build"
@@ -3185,7 +3230,7 @@ _compile_bash_deps() {
 		return 0
 	fi
 	
-	if [[ "$1" == "abstract" ]]
+	if [[ "$1" == "abstract" ]] || [[ "$1" == "abstractfs" ]]
 	then
 		_deps_dev
 		
@@ -3193,6 +3238,21 @@ _compile_bash_deps() {
 		
 		_deps_metaengine
 		
+		_deps_abstractfs
+		
+		return 0
+	fi
+	
+	# Beware most uses of fakehome will benefit from full virtualization fallback.
+	if [[ "$1" == "fakehome" ]]
+	then
+		_deps_dev
+		
+		_deps_channel
+		
+		_deps_metaengine
+		
+		_deps_fakehome
 		_deps_abstractfs
 		
 		return 0
@@ -3245,6 +3305,13 @@ _compile_bash_deps() {
 		
 		#_deps_proxy
 		#_deps_proxy_special
+		
+		# WARNING: Linux *kernel* admin assistance *only*. NOT any other UNIX like features.
+		# WARNING: Beware Linux shortcut specific dependency programs must not be required, or will break other operating systems!
+		# ie. _test_linux must not require Linux-only binaries
+		_deps_linux
+		
+		_deps_stopwatch
 		
 		_deps_build
 		
@@ -3301,6 +3368,10 @@ _compile_bash_deps() {
 		
 		_deps_proxy
 		_deps_proxy_special
+		
+		_deps_stopwatch
+		
+		_deps_linux
 		
 		_deps_build
 		
@@ -3500,6 +3571,7 @@ _compile_bash_utilities_virtualization() {
 	[[ "$enUb_docker" == "true" ]] && includeScriptList+=( "virtualization/docker"/dockeruser.sh )
 }
 
+# WARNING: Shortcuts must NOT cause _stop/exit failures in _test/_setup procedures!
 _compile_bash_shortcuts() {
 	export includeScriptList
 	
@@ -3556,6 +3628,13 @@ _compile_bash_shortcuts() {
 	[[ "$enUb_docker" == "true" ]] && includeScriptList+=( "shortcuts/docker"/dockercontainer.sh )
 	
 	[[ "$enUb_image" == "true" ]] && includeScriptList+=( "shortcuts/image"/gparted.sh )
+	
+	
+	[[ "$enUb_linux" == "true" ]] && includeScriptList+=( "shortcuts/linux"/kernelConfig_here.sh )
+	[[ "$enUb_linux" == "true" ]] && includeScriptList+=( "shortcuts/linux"/kernelConfig.sh )
+	[[ "$enUb_linux" == "true" ]] && includeScriptList+=( "shortcuts/linux"/kernelConfig_platform.sh )
+	
+	[[ "$enUb_linux" == "true" ]] && includeScriptList+=( "shortcuts/linux"/bfq.sh )
 }
 
 _compile_bash_shortcuts_setup() {

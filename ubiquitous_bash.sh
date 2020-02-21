@@ -138,6 +138,7 @@ else	#FAIL, implies [[ "$ub_import" == "true" ]]
 fi
 
 #Override.
+# DANGER: Recursion hazard. Do not create overrides without checking that alternate exists.
 
 # WARNING: Only partially compatible.
 if ! type md5sum > /dev/null 2>&1 && type md5 > /dev/null 2>&1
@@ -155,6 +156,30 @@ fi
 #		md5sum "$@"
 #	}
 #fi
+
+
+# WARNING: DANGER: Compatibility may not be guaranteed!
+if ! type unionfs-fuse > /dev/null 2>&1 && type unionfs > /dev/null 2>&1 && man unionfs | grep 'unionfs-fuse - A userspace unionfs implementation' > /dev/null 2>&1
+then
+	unionfs-fuse() {
+		unionfs "$@"
+	}
+fi
+
+if ! type qemu-arm-static > /dev/null 2>&1 && type qemu-arm > /dev/null 2>&1
+then
+	qemu-arm-static() {
+		qemu-arm "$@"
+	}
+fi
+
+if ! type qemu-armeb-static > /dev/null 2>&1 && type qemu-armeb > /dev/null 2>&1
+then
+	qemu-armeb-static() {
+		qemu-armeb "$@"
+	}
+fi
+
 
 #Override (Program).
 
@@ -2580,8 +2605,21 @@ _findInfrastructure_virtImage() {
 	[[ -e "$scriptLocal"/vm.vdi ]] && export ubVirtImageLocal="true" && return 0
 	[[ -e "$scriptLocal"/vmvdiraw.vmdi ]] && export ubVirtImageLocal="true" && return 0
 	
+	# WARNING: Override implies local image.
+	[[ "$ubVirtImageIsRootPartition" != "" ]] && export ubVirtImageLocal="true" && return 0
+	[[ "$ubVirtImageIsDevice" != "" ]] && export ubVirtImageLocal="true" && return 0
+	[[ "$ubVirtImageOverride" != "" ]] && export ubVirtImageLocal="true" && return 0
+	[[ "$ubVirtDeviceOverride" != "" ]] && export ubVirtImageLocal="true" && return 0
+	#[[ "$ubVirtPlatformOverride" != "" ]] && export ubVirtImageLocal="true" && return 0
+	
+	# WARNING: Symlink implies local image (even if non-existent destination).
+	[[ -h "$scriptLocal"/vm.img ]] && export ubVirtImageLocal="true" && return 0
+	[[ -h "$scriptLocal"/vm.vdi ]] && export ubVirtImageLocal="true" && return 0
+	[[ -h "$scriptLocal"/vmvdiraw.vmdi ]] && export ubVirtImageLocal="true" && return 0
+	
 	_checkSpecialLocks && export ubVirtImageLocal="true" && return 0
 	
+	# DANGER: Recursion hazard.
 	_findInfrastructure_virtImage_script "$@"
 }
 
@@ -2921,7 +2959,8 @@ _stop_virtLocal() {
 }
 
 _test_virtLocal_X11() {
-	_getDep xauth
+	! _wantGetDep xauth && echo warn: missing: xauth && return 1
+	return 0
 }
 
 # TODO: Expansion needed.
@@ -3113,13 +3152,33 @@ _query() {
 
 _setupUbiquitous_here() {
 	cat << CZXWXcRMTo8EmM8i4d
-type sudo > /dev/null 2>&1 && groups | grep -E 'wheel|sudo' > /dev/null 2>&1 && sudo -n renice -n -10 -p \$\$ > /dev/null 2>&1
+
+if type sudo > /dev/null 2>&1 && groups | grep -E 'wheel|sudo' > /dev/null 2>&1
+then
+	# Greater or equal, '_priority_critical_pid_root' .
+	sudo -n renice -n -15 -p \$\$ > /dev/null 2>&1
+	sudo -n ionice -c 2 -n 2 -p \$\$ > /dev/null 2>&1
+fi
+# ^
+# Ensures admin user shell startup, including Ubiquitous Bash, is relatively quick under heavy system load.
+# Near-realtime priority may be acceptable, due to reliability of relevant Ubiquitous Bash functions.
+# WARNING: Do NOT prioritize highly enough to interfere with embedded hard realtime processes.
+
 
 export profileScriptLocation="$ubcoreUBdir"/ubiquitous_bash.sh
 export profileScriptFolder="$ubcoreUBdir"
 [[ "\$scriptAbsoluteLocation" != "" ]] && . "\$scriptAbsoluteLocation" --parent _importShortcuts
 [[ "\$scriptAbsoluteLocation" == "" ]] && . "\$profileScriptLocation" --profile _importShortcuts
 
+
+# Returns priority to normal.
+# Greater or equal, '_priority_app_pid_root' .
+#ionice -c 2 -n 3 -p \$\$
+#renice -n -5 -p \$\$ > /dev/null 2>&1
+
+# Returns priority to normal.
+# Greater or equal, '_priority_app_pid' .
+ionice -c 2 -n 4 -p \$\$
 renice -n 0 -p \$\$ > /dev/null 2>&1
 
 true
@@ -3308,6 +3367,77 @@ _anchor() {
 }
 
 
+
+
+_setup_renice() {
+	_messageNormal '_setup_renice'
+	
+	if [[ "$scriptAbsoluteFolder" == *'ubiquitous_bash' ]] && [[ "$1" != '--force' ]]
+	then
+		_messagePlain_bad 'bad: generic ubiquitous_bash installation detected'
+		_messageFAIL
+		_stop 1
+	fi
+	
+	
+	_messagePlain_nominal '_setup_renice: hook: ubcore'
+	local ubHome
+	ubHome="$HOME"
+	export ubcoreDir="$ubHome"/.ubcore
+	export ubcoreFile="$ubcoreDir"/.ubcorerc
+	
+	if ! [[ -e "$ubcoreFile" ]]
+	then
+		_messagePlain_warn 'fail: hook: missing: .ubcorerc'
+		return 1
+	fi
+	
+	if grep 'token_ub_renice' "$ubcoreFile" > /dev/null 2>&1
+	then
+		_messagePlain_good 'good: hook: present: .ubcorerc'
+		return 0
+	fi
+	
+	#echo '# token_ub_renice' >> "$ubcoreFile"
+	cat << CZXWXcRMTo8EmM8i4d >> "$ubcoreFile"
+
+# token_ub_renice
+if [[ "\$__overrideRecursionGuard_make" != 'true' ]] && [[ "\$__overrideKeepPriority_make" != 'true' ]] && type which > /dev/null 2>&1 && which make > /dev/null 2>&1
+then
+	__overrideRecursionGuard_make='true'
+	__override_make=$(which make 2>/dev/null)
+	make() {
+		#Greater or equal, _priority_idle_pid
+		
+ 		ionice -c 2 -n 5 -p \$\$ > /dev/null 2>&1
+		renice -n 3 -p \$\$ > /dev/null 2>&1
+		
+		"\$__override_make" "\$@"
+	}
+fi
+
+CZXWXcRMTo8EmM8i4d
+	
+	if grep 'token_ub_renice' "$ubcoreFile" > /dev/null 2>&1
+	then
+		_messagePlain_good 'good: hook: present: .ubcorerc'
+		#return 0
+	else
+		_messagePlain_bad 'fail: hook: missing: token: .ubcorerc'
+		_messageFAIL
+		return 1
+	fi
+	
+	
+	
+	_messagePlain_nominal '_setup_renice: hook: cron'
+	echo '@reboot '"$scriptAbsoluteLocation"' _unix_renice_execDaemon' | crontab -
+	
+	#echo '*/7 * * * * '"$scriptAbsoluteLocation"' _unix_renice'
+	#echo '*/1 * * * * '"$scriptAbsoluteLocation"' _unix_renice_app'
+}
+
+# WARNING: Recommend, using an independent installation (ie. not '~/core/infrastructure/ubiquitous_bash').
 _unix_renice_execDaemon() {
 	_cmdDaemon "$scriptAbsoluteLocation" _unix_renice_repeat
 }
@@ -3330,29 +3460,39 @@ _unix_renice_daemon() {
 }
 
 _unix_renice_repeat() {
+	# sleep 0.7
+	_unix_renice_app
+	_unix_renice
+	
+	sleep 3
+	_unix_renice_app
+	_unix_renice
+	
+	sleep 9
+	_unix_renice_app
+	_unix_renice
+	
+	sleep 27
+	_unix_renice_app
+	_unix_renice
+	
+	sleep 27
+	_unix_renice_app
+	_unix_renice
+	
+	local currentIteration
 	while true
 	do
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
-		_unix_renice_app > /dev/null 2>&1
-		sleep 10
+		currentIteration=0
+		while [[ "$currentIteration" -lt "4" ]]
+		do
+			sleep 120
+			[[ "$matchingEMBEDDED" != 'false' ]] && sleep 120
+			_unix_renice_app > /dev/null 2>&1
+			let currentIteration="$currentIteration"+1
+		done
 		
 		_unix_renice
-		sleep 10
 	done
 }
 
@@ -3444,6 +3584,14 @@ _unix_renice_app() {
 	
 	_priority_enumerate_pattern "^konsole$" >> "$processListFile"
 	
+	
+	_priority_enumerate_pattern "^okular$" >> "$processListFile"
+	
+	_priority_enumerate_pattern "^xournal$" >> "$processListFile"
+	
+	_priority_enumerate_pattern "^soffice.bin$" >> "$processListFile"
+	
+	
 	_priority_enumerate_pattern "^pavucontrol$" >> "$processListFile"
 	
 	local currentPID
@@ -3489,6 +3637,11 @@ _unix_renice_idle() {
 	_priority_enumerate_pattern "^mysqld$" >> "$processListFile"
 	_priority_enumerate_pattern "^ntpd$" >> "$processListFile"
 	#_priority_enumerate_pattern "^avahi-daemon$" >> "$processListFile"
+	
+	
+	# WARNING: Probably unnecessary and counterproductive. May risk halting important compile jobs.
+	#_priority_enumerate_pattern "^cc1$" >> "$processListFile"
+	#_priority_enumerate_pattern "^cc1plus$" >> "$processListFile"
 	
 	
 	local currentPID
@@ -4481,6 +4634,16 @@ _test() {
 	rm -f "$safeTmp"/flock > /dev/null 2>&1
 	rm -f "$safeTmp"/ready > /dev/null 2>&1
 	
+	ln -s /dev/null "$safeTmp"/working
+	ln -s /dev/null/broken "$safeTmp"/broken
+	if ! [[ -h "$safeTmp"/broken ]] || ! [[ -h "$safeTmp"/working ]] || [[ -e "$safeTmp"/broken ]] || ! [[ -e "$safeTmp"/working ]]
+	then
+		_messageFAIL
+		_stop 1
+	fi
+	rm -f "$safeTmp"/working
+	rm -f "$safeTmp"/broken
+	
 	_messagePASS
 	
 	
@@ -4537,6 +4700,7 @@ _test() {
 	_getDep bash
 	_getDep echo
 	_getDep cat
+	_getDep tac
 	_getDep type
 	_getDep mkdir
 	_getDep trap
@@ -5546,7 +5710,7 @@ _wmctrl_change_wait() {
 }
 
 _wmctrl_desk() {
-	wmctrl -d | grep '*' | cut -f1 -d\  2>/dev/null | tr -dc '0-9'
+	wmctrl -d | grep '^[0-9]*.*\*' | cut -f1 -d\  2>/dev/null | tr -dc '0-9'
 }
 
 
