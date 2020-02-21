@@ -41,9 +41,13 @@ _panel_place_sidebar_id() {
 
 # ATTENTION: Override with 'ops' or update.
 _panel_place_sidebar_id_rules_determine_fileDriven() {
-	echo "$1" | grep ' '"$placement_quick"' ' > /dev/null 2>&1 && return 0
-	echo "$1" | grep ' '"$placement_plates"' ' > /dev/null 2>&1 && return 0
-	return 1
+	# ATTENTION: Default. Function '_panel_place_app' will work on any desktop, and should only be called from dedicated file manager.
+	# Intended to be used with "_fsClient", part of "webClient".
+	return 0
+	
+	#echo "$1" | grep ' '"$placement_quick"' ' > /dev/null 2>&1 && return 0
+	#echo "$1" | grep ' '"$placement_plates"' ' > /dev/null 2>&1 && return 0
+	#return 1
 }
 
 # ATTENTION: Override with 'ops' or update.
@@ -372,8 +376,10 @@ _panel_place_app() {
 
 
 
-
+# ATTENTION: Override with 'ops' or similar.
 _panel_place_procedure() {
+	
+	# ATTENTION: Not default. Expected to cause _panel_place and _panel_place_loop to apply placement rules to any current desktop.
 	#local current_wmctrl_desk=$(_wmctrl_desk)
 	#[[ "$current_wmctrl_desk" != "$placement_quick" ]] && [[ "$current_wmctrl_desk" != "$placement_plates" ]] && return 0
 	#export panel_place_limit_desk="$current_wmctrl_desk"
