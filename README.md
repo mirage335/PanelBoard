@@ -34,7 +34,7 @@ Conditions for window placement/switching.
 
 Configure an "_fsClient" installation (part of webClient) with file associations using "_panel_place_app" .
 
-Placement of file manager may be done through "_panel_place_app" or retroactively through "_panel_files" .
+Placement of file manager may be done through "_panel_place_app" .
 
 Conditions for window placement/switching.
 * Current desktop must be enumerated in function '_panel_place_sidebar_id_rules_determine_fileDriven'. Default any desktop.

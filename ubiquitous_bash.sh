@@ -3032,10 +3032,18 @@ _resetFakeHomeEnv() {
 #####Shortcuts
 
 _visualPrompt() {
-#+%H:%M:%S\ %Y-%m-%d\ Q%q
-#+%H:%M:%S\ %b\ %d,\ %y
-export PS1='\[\033[01;40m\]\[\033[01;36m\]+\[\033[01;34m\]-|\[\033[01;31m\]${?}:${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u\[\033[01;32m\]@\h\[\033[01;36m\]\[\033[01;34m\])-\[\033[01;36m\]------------------------\[\033[01;34m\]-(\[\033[01;35m\]$(date +%H:%M:%S\ .%d)\[\033[01;34m\])-\[\033[01;36m\]- -|\[\033[00m\]\n\[\033[01;40m\]\[\033[01;36m\]+\[\033[01;34m\]-|\[\033[37m\][\w]\[\033[00m\]\n\[\033[01;36m\]+\[\033[01;34m\]-|\#) \[\033[36m\]>\[\033[00m\] '
-} 
+	#+%H:%M:%S\ %Y-%m-%d\ Q%q
+	#+%H:%M:%S\ %b\ %d,\ %y
+
+	#Long.
+	#export PS1='\[\033[01;40m\]\[\033[01;36m\]+\[\033[01;34m\]-|\[\033[01;31m\]${?}:${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u\[\033[01;32m\]@\h\[\033[01;36m\]\[\033[01;34m\])-\[\033[01;36m\]--\[\033[01;34m\]-(\[\033[01;35m\]$(date +%H:%M:%S\ .%d)\[\033[01;34m\])-\[\033[01;36m\]-|\[\033[00m\]\n\[\033[01;40m\]\[\033[01;36m\]+\[\033[01;34m\]-|\[\033[37m\][\w]\[\033[00m\]\n\[\033[01;36m\]+\[\033[01;34m\]-|\#) \[\033[36m\]>\[\033[00m\] '
+
+	#Short.
+	#export PS1='\[\033[01;40m\]\[\033[01;36m\]+\[\033[01;34m\]|\[\033[01;31m\]${?}:${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u\[\033[01;32m\]@\h\[\033[01;36m\]\[\033[01;34m\])-\[\033[01;36m\]-\[\033[01;34m\]-(\[\033[01;35m\]$(date +%H:%M:%S\ .%d)\[\033[01;34m\])\[\033[01;36m\]|\[\033[00m\]\n\[\033[01;40m\]\[\033[01;36m\]+\[\033[01;34m\]|\[\033[37m\][\w]\[\033[00m\]\n\[\033[01;36m\]+\[\033[01;34m\]|\#) \[\033[36m\]>\[\033[00m\] '
+	
+	#Truncated, 40 columns.
+	export PS1='\[\033[01;40m\]\[\033[01;36m\]\[\033[01;34m\]|\[\033[01;31m\]${?}:${debian_chroot:+($debian_chroot)}\[\033[01;33m\]\u\[\033[01;32m\]@\h\[\033[01;36m\]\[\033[01;34m\])\[\033[01;36m\]\[\033[01;34m\]-(\[\033[01;35m\]$(date +%H:%M:%S\.%d)\[\033[01;34m\])\[\033[01;36m\]|\[\033[00m\]\n\[\033[01;40m\]\[\033[01;36m\]\[\033[01;34m\]|\[\033[37m\][\w]\[\033[00m\]\n\[\033[01;36m\]\[\033[01;34m\]|\#) \[\033[36m\]>\[\033[00m\] '
+}
 
 #Simulated client/server discussion testing.
 
@@ -5443,7 +5451,7 @@ _panel_place_activate_app_currentDesk() {
 	#echo "$current_arg4_absolute"
 	
 	
-	
+	_messagePlain_probe_var current_arg1
 	_messagePlain_probe_var current_arg1_absolute
 	
 	_messagePlain_probe_var current_arg2_absolute
@@ -5495,13 +5503,20 @@ _panel_place_activate_app_currentDesk() {
 			_messagePlain_good 'matched: file parameters'
 			
 			# ATTENTION: Update with any other required workarounds.
-			[[ "$current_arg1" == *"dolphin"* ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
+			if [[ "$current_arg1" == *"dolphin"* ]]
+			then
+				if [[ "$current_wmctrl_args" != "$current_arg1"* ]] && [[ "$current_wmctrl_args" != "_dolphin_"* ]] && [[ "$current_wmctrl_args" != "_dolphin"* ]] && [[ "$current_wmctrl_args" != "_fsClient"* ]]
+				then
+					_messagePlain_warn 'workaround: partial match'
+					continue
+				fi
+			fi
 			[[ "$current_arg1" == *"konsole"* ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
 			
 			[[ -d "$current_arg2" ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
 			[[ "$current_arg2" == "$ubiquitiousBashID"_doNotMatch ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'reject: "$ubiquitiousBashID"_doNotMatch' && continue
 			
-			_messagePlain_good 'accept: '
+			_messagePlain_good 'accept...'
 			_messagePlain_probe_cmd _panel_place_sidebar_id_rules "$current_wmctrl_string"
 			
 			_messagePlain_nominal '_panel_place_activate_app_currentDesk: wmctrl'

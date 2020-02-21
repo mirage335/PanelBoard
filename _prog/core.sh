@@ -282,7 +282,7 @@ _panel_place_activate_app_currentDesk() {
 	#echo "$current_arg4_absolute"
 	
 	
-	
+	_messagePlain_probe_var current_arg1
 	_messagePlain_probe_var current_arg1_absolute
 	
 	_messagePlain_probe_var current_arg2_absolute
@@ -334,13 +334,20 @@ _panel_place_activate_app_currentDesk() {
 			_messagePlain_good 'matched: file parameters'
 			
 			# ATTENTION: Update with any other required workarounds.
-			[[ "$current_arg1" == *"dolphin"* ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
+			if [[ "$current_arg1" == *"dolphin"* ]]
+			then
+				if [[ "$current_wmctrl_args" != "$current_arg1"* ]] && [[ "$current_wmctrl_args" != "_dolphin_"* ]] && [[ "$current_wmctrl_args" != "_dolphin"* ]] && [[ "$current_wmctrl_args" != "_fsClient"* ]]
+				then
+					_messagePlain_warn 'workaround: partial match'
+					continue
+				fi
+			fi
 			[[ "$current_arg1" == *"konsole"* ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
 			
 			[[ -d "$current_arg2" ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'workaround: partial match' && continue
 			[[ "$current_arg2" == "$ubiquitiousBashID"_doNotMatch ]] && [[ "$current_wmctrl_args" != "$current_arg1"* ]] && _messagePlain_warn 'reject: "$ubiquitiousBashID"_doNotMatch' && continue
 			
-			_messagePlain_good 'accept: '
+			_messagePlain_good 'accept...'
 			_messagePlain_probe_cmd _panel_place_sidebar_id_rules "$current_wmctrl_string"
 			
 			_messagePlain_nominal '_panel_place_activate_app_currentDesk: wmctrl'
