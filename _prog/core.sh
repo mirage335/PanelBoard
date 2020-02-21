@@ -147,13 +147,14 @@ _panel_place_update_procedure() {
 	
 	_messagePlain_probe_var panel_place_limit_currentDesk
 	_messagePlain_probe_cmd _wmctrl_desk
+	echo
 	_messagePlain_probe_cmd wmctrl -l -p
 	
 	_messagePlain_probe 'wmctrl -l -p | _wmctrl_place_filter | sed "'"s/\s\s*/ /g"'"'
-	wmctrl -l -p | _wmctrl_place_filter | sed "'"s/\s\s*/ /g"'"
+	wmctrl -l -p | _wmctrl_place_filter | sed 's/\s\s*/ /g'
 	
 	_messagePlain_probe 'wmctrl -l -p | _wmctrl_place_filter | sed "'"s/\s\s*/ /g"'" | _panel_place_update_procedure_filter'
-	wmctrl -l -p | _wmctrl_place_filter | sed "'"s/\s\s*/ /g"'" | _panel_place_update_procedure_filter
+	wmctrl -l -p | _wmctrl_place_filter | sed 's/\s\s*/ /g' | _panel_place_update_procedure_filter
 	
 	
 	# DANGER: Irregular single-thread only use of "bootTmp" for embedded performance.
@@ -176,7 +177,7 @@ _panel_place_update_procedure() {
 	# ** Alternatively, it may be helpful to teminate old windows, for performance.
 	#while read -r current_wmctrl_string
 	_messagePlain_probe 'wmctrl -l -p | _wmctrl_place_filter | sed "'"s/\s\s*/ /g"'" | _panel_place_update_procedure_filter | tail -n 14 | while read -r current_wmctrl_string'
-	wmctrl -l -p | _wmctrl_place_filter | sed "'"s/\s\s*/ /g"'" | _panel_place_update_procedure_filter | tail -n 14 | while read -r current_wmctrl_string
+	wmctrl -l -p | _wmctrl_place_filter | sed 's/\s\s*/ /g' | _panel_place_update_procedure_filter | tail -n 14 | while read -r current_wmctrl_string
 	do
 		# If test would reject some irrelevant entries if not already discarded by filtering.
 		#if ! [[ $(_safeEcho_newline "$current_wmctrl_string" | cut -f2 -d\  | tr -dc '0-9\-') -lt 0 ]]
@@ -295,6 +296,7 @@ _panel_place_activate_app_currentDesk() {
 	_messagePlain_nominal '_panel_place_activate_app_currentDesk: list'
 	
 	_messagePlain_probe_cmd _wmctrl_desk
+	echo
 	
 	_messagePlain_probe_cmd wmctrl -l -p
 	_messagePlain_probe_cmd wmctrl -l -p | _wmctrl_place_filter | sed 's/\s\s*/ /g'
@@ -549,6 +551,7 @@ _panel_files() {
 	_messagePlain_nominal '_panel_files: id'
 	
 	_messagePlain_probe_cmd _wmctrl_desk
+	echo
 	_messagePlain_probe_cmd wmctrl -l -p | _wmctrl_place_filter | sed 's/\s\s*/ /g'
 	_messagePlain_probe_cmd wmctrl -l -p | _wmctrl_place_filter | sed 's/\s\s*/ /g' | grep ' '$(_wmctrl_desk)' ' | _panel_place_filter_filemanager
 	
