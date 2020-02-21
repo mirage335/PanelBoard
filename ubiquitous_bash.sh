@@ -5718,7 +5718,7 @@ _wmctrl_change_wait() {
 }
 
 _wmctrl_desk() {
-	wmctrl -d | grep '^[0-9]*.\*' | cut -f1 -d\  2>/dev/null | tr -dc '0-9'
+	wmctrl -d | grep '^[0-9]*.*\*.' | cut -f1 -d\  2>/dev/null | tr -dc '0-9'
 }
 
 
