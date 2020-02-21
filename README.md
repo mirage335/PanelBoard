@@ -20,6 +20,27 @@ Manages other application windows, rather than providing a custom application at
 
 # Usage
 
+## Workflows
+
+### Automatic Loop
+
+Run _panel_place_loop .
+
+Conditions for window placement/switching.
+* Managed desktops enumerated in function '_panel_place_procedure' . Default only '01-plates', '02-plates'. Alternative, any current desktop.
+
+
+### Dedicated File Manager
+
+Configure an "_fsClient" installation (part of webClient) with file associations using "_panel_place_app" .
+
+Placement of file manager may be done through "_panel_place_app" or retroactively through "_panel_files" .
+
+Conditions for window placement/switching.
+* Current desktop must be enumerated in function '_panel_place_sidebar_id_rules_determine_fileDriven'. Default any desktop.
+* App matches lists under '_wmctrl_place_filter', '_wmctrl_change_hash' functions.
+* Workarounds, if needed, are defined by lists under '_panel_place_app_simple', '_panel_place_app_reasonable'.
+
 ## Script
 
 * _panel_place
