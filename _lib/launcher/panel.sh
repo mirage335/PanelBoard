@@ -40,7 +40,7 @@ _panel_fsClient_desk() {
 _panel() {
 	find "$panelScriptAbsoluteFolder" -name '*-*' -mindepth 1 -maxdepth 1 -type d -exec "$panelScriptAbsoluteLocation" _panel_fsClient_desk '{}' \;
 	
-	_switchDeskNumber 0
+	_switchDeskNumber 1
 	xmessage -timeout 3 'panel.sh: done'
 }
 
