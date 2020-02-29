@@ -69,9 +69,9 @@ Quick desktop should be visually equivalent to a typical tabbed IDE interface.
 
 ```
 01-quick*	Specifically named files and folders. File manager driven.
-02-plates*	Predetermined approach plates. File manager driven.
+02-plates*	Predetermined approach plates. Maneuver descriptions. Measurement methodology. File manager driven.
 
-03-cruise**	Cruising waypoints. Spreadsheets. Calculators.
+03-cruise**	Cruising and parked configuration. Plates list. Waypoints. Spreadsheets. Calculators.
 
 04-fusion	Combined synthetic rendering (typically single window rendered framebuffer). Redundant AR HUD/HMD on/off toggle switch.
 05-synthetic	Map, SyntheticVision, Traffic Collision Avoidance, Infrared, Radar, Weather.

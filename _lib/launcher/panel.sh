@@ -10,12 +10,14 @@ _switchDeskNumber() {
 	currentDeskNumber="$1"
 	let currentDeskNumber="$currentDeskNumber"-1
 	wmctrl -s "$currentDeskNumber"
+	sleep 0.1
 }
 
 _specialized_fsClient() {
 	"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/installations/specializedClients/_dolphin_editHome "$@"
 }
 
+# ATTENTION: Override with 'ops' or similar. Any specialized applications (eg. instrumentation) should be launched from here, possibly in addition to system startup (ie. cron job).
 _panel_fsClient_desk() {
 	local currentDeskNumber
 	currentDeskNumber=$(basename "$1" | cut -c 1-2)
@@ -33,12 +35,23 @@ _panel_fsClient_desk() {
 	_switchDeskNumber "$currentDeskNumber"
 	sleep 1
 	
+	# ATTENTION: Overrides here.
+	if [[ "$currentDeskNumber" == "7" ]]
+	then
+		dolphin --new-window "$panelScriptAbsoluteFolder"/07-material &
+		sleep 5
+		return 0
+	fi
+	
 	_specialized_fsClient "$1"
 	sleep 1
+	
+	return 0
 }
 
 _panel() {
-	find "$panelScriptAbsoluteFolder" -name '*-*' -mindepth 1 -maxdepth 1 -type d -exec "$panelScriptAbsoluteLocation" _panel_fsClient_desk '{}' \;
+	find "$panelScriptAbsoluteFolder" -mindepth 1 -maxdepth 1 -name '*-*' ! -name '07-material' -type d -exec "$panelScriptAbsoluteLocation" _panel_fsClient_desk '{}' \;
+	
 	
 	_switchDeskNumber 1
 	xmessage -timeout 3 'panel.sh: done'
