@@ -68,7 +68,7 @@ Physical desktop computer (or virtual machine) contains an interface divided int
 Quick desktop should be visually equivalent to a typical tabbed IDE interface.
 
 ```
-01-quick*	Specifically named files and folders. File manager driven.
+01-quick*	Specifically named files and folders. File manager driven. ALTERNATIVE: Managed Admin for Offline Maintenance.
 02-plates*	Predetermined approach plates. Maneuver descriptions. Measurement methodology. File manager driven.
 
 03-cruise**	Cruising and parked configuration. Plates list. Waypoints. Spreadsheets. Calculators.
