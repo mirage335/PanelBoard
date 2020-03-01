@@ -50,7 +50,7 @@ _panel_fsClient_desk() {
 }
 
 _panel() {
-	find "$panelScriptAbsoluteFolder" -mindepth 1 -maxdepth 1 -name '*-*' ! -name '07-material' -type d -exec "$panelScriptAbsoluteLocation" _panel_fsClient_desk '{}' \;
+	find "$panelScriptAbsoluteFolder" -mindepth 1 -maxdepth 1 -name '*-*' -type d -exec "$panelScriptAbsoluteLocation" _panel_fsClient_desk '{}' \;
 	
 	
 	_switchDeskNumber 1
