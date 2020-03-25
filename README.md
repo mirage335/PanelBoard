@@ -157,6 +157,15 @@ Not all voice commands will typically be enabled.
 * Autopilot (of any kind) ON/OFF indicator should be included on taskbar at all times if relevant data is available.
 
 
+## Resolution
+
+Panel resolution should be one of or similar to:
+1024x768
+1366x768
+1280x720
+1920x1080
+3840x2160 (native, divide by 2 = 1920x1080, divide by 3 = 1280x720)
+
 
 # Recommended
 
