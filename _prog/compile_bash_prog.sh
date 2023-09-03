@@ -9,6 +9,25 @@ _compile_bash_deps() {
 	
 	_deps_virt
 	
+	
+	
+	_deps_dev
+	
+	#_deps_python
+	#_deps_haskell
+	
+	#_deps_calculators
+	
+	#_deps_channel
+	
+	#_deps_queue
+	#_deps_metaengine
+	
+	_deps_fakehome
+	_deps_abstractfs
+	
+	#_deps_stopwatch
+	
 	#false
 }
 
@@ -112,6 +131,8 @@ _compile_bash_program_prog() {
 	
 	includeScriptList+=( 'core_wmctrl.sh' )
 	includeScriptList+=( 'core_xrandr.sh' )
+	
+	includeScriptList+=( 'core_specializedClients.sh' )
 	
 	true
 }
