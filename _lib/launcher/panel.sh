@@ -15,7 +15,8 @@ _switchDeskNumber() {
 
 _specialized_fsClient() {
 	#"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/installations/specializedClients/_dolphin_editHome "$@"
-	"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/infrastructure/PanelBoard/ubiquitous_bash.sh dolphin "$@"
+	#"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/infrastructure/PanelBoard/ubiquitous_bash.sh _editFakeHome dolphin "$@"
+	#"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/infrastructure/PanelBoard/ubiquitous_bash.sh _panelApp-dolphin_editHome "$@"
 }
 
 # ATTENTION: Override with 'ops' or similar. Any specialized applications (eg. instrumentation) should be launched from here, possibly in addition to system startup (ie. cron job).
