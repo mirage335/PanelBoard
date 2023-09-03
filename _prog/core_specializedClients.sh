@@ -21,8 +21,12 @@ _panelApp-dolphin_editHome() {
 		sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.kde/share/config/kdeglobals
 	fi
 	
+	sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.config/kdeglobals
+	sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.kde/share/config/kdeglobals
 	
-	_editFakeHome dolphin "$@"
+	#export keepFakeHome="false"
+	#export setFakeHome=true
+	_editFakeHome dolphin --new-window "$@"
 }
 
 
