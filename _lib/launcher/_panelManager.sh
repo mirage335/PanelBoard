@@ -3028,11 +3028,15 @@ export ub_ops_disable='true'
 
 _main() {
 	"$scriptAbsoluteFolder"/panel.sh
+	return
+
 	#disown -h $!
 	#disown
 	#disown -a -h -r
 	#disown -a -r
 
+	# CAUTION: No 'sleep' in this unnecessary loop. Instead, the automatically installed file associations should be used for both additional functionality and better efficiency.
+	return
 	if [[ -e "$HOME"/core/infrastructure/PanelBoard/_panel_place_loop ]]
 	then
 		"$HOME"/core/infrastructure/PanelBoard/_panel_place_loop &
