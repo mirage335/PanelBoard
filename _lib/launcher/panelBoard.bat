@@ -332,7 +332,7 @@ REM ##### Entry
 
 @echo on
 REM wslg.exe -d ubdist ~/.ubcore/ubiquitous_bash/ubiquitous_bash.sh _wrap "ldesk" "" "%~dp0panel.sh"
-wslg.exe -d ubdist ~/.ubcore/ubiquitous_bash/ubiquitous_bash.sh _wrap "ldesk" "" "%~dp0_panelManager.sh"
+start "" wslg.exe -d ubdist ~/.ubcore/ubiquitous_bash/ubiquitous_bash.sh _wrap "ldesk" "" "%~dp0_panelManager.sh"
 
 
 :end
