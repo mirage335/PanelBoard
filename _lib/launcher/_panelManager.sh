@@ -3027,10 +3027,30 @@ export ub_ops_disable='true'
 
 
 _main() {
-	"$HOME"/core/infrastructure/PanelBoard/_panel_place_loop > /dev/null 2>&1 &
-	
 	"$scriptAbsoluteFolder"/panel.sh
+	#disown -h $!
+	#disown
+	#disown -a -h -r
+	#disown -a -r
+
+	if [[ -e "$HOME"/core/infrastructure/PanelBoard/_panel_place_loop ]]
+	then
+		"$HOME"/core/infrastructure/PanelBoard/_panel_place_loop &
+		#disown -h $!
+		disown
+		disown -a -h -r
+		disown -a -r
+	elif [[ -e "$HOME"/core/installations/PanelBoard/_panel_place_loop ]]
+	then
+		"$HOME"/core/installations/PanelBoard/_panel_place_loop &
+		#disown -h $!
+		disown
+		disown -a -h -r
+		disown -a -r
+	fi
 }
+
+
 
 
 

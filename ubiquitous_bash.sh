@@ -36,7 +36,7 @@ _ub_cksum_special_derivativeScripts_contents() {
 #export ub_setScriptChecksum_disable='true'
 ( [[ -e "$0".nck ]] || [[ "${BASH_SOURCE[0]}" != "${0}" ]] || [[ "$1" == '--profile' ]] || [[ "$1" == '--script' ]] || [[ "$1" == '--call' ]] || [[ "$1" == '--return' ]] || [[ "$1" == '--devenv' ]] || [[ "$1" == '--shell' ]] || [[ "$1" == '--bypass' ]] || [[ "$1" == '--parent' ]] || [[ "$1" == '--embed' ]] || [[ "$1" == '--compressed' ]] || [[ "$0" == "/bin/bash" ]] || [[ "$0" == "-bash" ]] || [[ "$0" == "/usr/bin/bash" ]] || [[ "$0" == "bash" ]] ) && export ub_setScriptChecksum_disable='true'
 export ub_setScriptChecksum_header='2591634041'
-export ub_setScriptChecksum_contents='3495357896'
+export ub_setScriptChecksum_contents='3598815266'
 
 # CAUTION: Symlinks may cause problems. Disable this test for such cases if necessary.
 # WARNING: Performance may be crucial here.
@@ -9580,7 +9580,6 @@ _fakeHome() {
 	#fakeHomeENVvars+=( SSH_AUTH_SOCK="$SSH_AUTH_SOCK" SSH_AGENT_PID="$SSH_AGENT_PID" GPG_AGENT_INFO="$GPG_AGENT_INFO" )
 	fakeHomeENVvars+=(SESSION_MANAGER="$SESSION_MANAGER" WINDOWID="$WINDOWID" QT_ACCESSIBILITY="$QT_ACCESSIBILITY" COLORTERM="$COLORTERM" XDG_SESSION_PATH="$XDG_SESSION_PATH" LANGUAGE="$LANGUAGE"  SHELL_SESSION_ID="$SHELL_SESSION_ID" DESKTOP_SESSION="$DESKTOP_SESSION" XCURSOR_SIZE="$XCURSOR_SIZE" GTK_MODULES="$GTK_MODULES" XDG_SEAT="$XDG_SEAT" XDG_SESSION_DESKTOP="$XDG_SESSION_DESKTOP" XDG_SESSION_TYPE="$XDG_SESSION_TYPE" XDG_CURRENT_DESKTOP="$XDG_CURRENT_DESKTOP" KONSOLE_DBUS_SERVICE="$KONSOLE_DBUS_SERVICE" PYTHONSTARTUP="$PYTHONSTARTUP" KONSOLE_DBUS_SESSION="$KONSOLE_DBUS_SESSION" PROFILEHOME="$PROFILEHOME" TMPDIR="$TMPDIR" XDG_SEAT_PATH="$XDG_SEAT_PATH" KDE_SESSION_UID="$KDE_SESSION_UID" XDG_SESSION_CLASS="$XDG_SESSION_CLASS" COLORFGBG="$COLORFGBG" KDE_SESSION_VERSION="$KDE_SESSION_VERSION" SHLVL="$SHLVL" LC_MEASUREMENT="$LC_MEASUREMENT" XDG_VTNR="$XDG_VTNR" XDG_SESSION_ID="$XDG_SESSION_ID" GS_LIB="$GS_LIB" XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" LC_TIME="$LC_TIME" QT_AUTO_SCREEN_SCALE_FACTOR="$QT_AUTO_SCREEN_SCALE_FACTOR" XCURSOR_THEME="$XCURSOR_THEME" KDE_FULL_SESSION="$KDE_FULL_SESSION" KONSOLE_PROFILE_NAME="$KONSOLE_PROFILE_NAME" DBUS_SESSION_BUS_ADDRESS="$DBUS_SESSION_BUS_ADDRESS" KONSOLE_DBUS_WINDOW="$KONSOLE_DBUS_WINDOW" LS_COLORS="$LS_COLORS")
 	
-	fakeHomeENVvars+=(QT_QPA_PLATFORMTHEME="$QT_QPA_PLATFORMTHEME")
 	
 	
 	if type dbus-run-session > /dev/null 2>&1 && [[ "$fakeHome_dbusRunSession_DISABLE" != "true" ]]
@@ -10841,6 +10840,32 @@ _git_shallow() {
 }
 
 
+_self_gitMad_procedure() {
+	local functionEntryPWD
+	functionEntryPWD="$PWD"
+
+	cd "$scriptAbsoluteFolder"
+	_gitMad
+	
+	cd "$functionEntryPWD"
+}
+_self_gitMad() {
+	"$scriptAbsoluteLocation" _self_gitMad_procedure "$@"
+}
+# https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes
+_gitMad() {
+	git config core.fileMode false
+	git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
+}
 
 
 
@@ -10912,34 +10937,6 @@ _gitBare() {
 }
 
 
-
-
-_self_gitMad_procedure() {
-	local functionEntryPWD
-	functionEntryPWD="$PWD"
-
-	cd "$scriptAbsoluteFolder"
-	_gitMad
-	
-	cd "$functionEntryPWD"
-}
-_self_gitMad() {
-	"$scriptAbsoluteLocation" _self_gitMad_procedure "$@"
-}
-# https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes
-_gitMad() {
-	git config core.fileMode false
-	git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-	git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git submodule foreach git config core.fileMode false
-}
 
 
 _gitBest_detect_github_procedure() {
@@ -19246,7 +19243,16 @@ _test_prog() {
 
 _setup_prog() {
 	# Specifically desirable to use relatively lean Ubiquitous Bash.
-	_setupUbiquitous_nonet
+	if [[ ! -e "$HOME"/.ubcore ]]
+	then
+		_editFakeHome "$scriptAbsoluteLocation" _setupUbiquitous_nonet
+	fi
+	
+	_messageNormal '_panelApp-copyHome'
+	_panelApp-copyHome
+	
+	_messageNormal '_panelApp-SingleClick_write'
+	_panelApp-SingleClick_write
 }
 
 
@@ -19678,6 +19684,10 @@ _panel_place_app_procedure() {
 		
 		#"$@" &
 		"${processedArgs[@]}" &
+		#disown -h $!
+		disown
+		disown -a -h -r
+		disown -a -r
 		
 		sleep 0.3
 		
@@ -19847,7 +19857,9 @@ _refresh_anchors() {
 	
 	cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_panel_files
 	
-	cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_panelApp-dolphin_editHome
+	# CAUTION: Needed for '_panel_place_app' to recognize the app for faster and more robust placement.
+	cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_dolphin_editFakeHome
+	#cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_panelApp-dolphin_editHome
 }
 
 
@@ -20024,8 +20036,16 @@ _xrandr_primary_string_extract_height() {
 
 
 
-#"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/infrastructure/PanelBoard/ubiquitous_bash.sh dolphin "$@"
-_panelApp-dolphin_editHome() {
+_panelApp-SingleClick_write-single() {
+	sed -i 's/SingleClick=false/SingleClick=true/g' "$1"
+}
+_panelApp-SingleClick_write() {
+	_panelApp-SingleClick_write-single "$globalFakeHome"/.config/kdedefaults/kdeglobals
+	_panelApp-SingleClick_write-single "$globalFakeHome"/.config/kdeglobals
+	_panelApp-SingleClick_write-single "$globalFakeHome"/.kde/share/config/kdeglobals
+}
+
+_panelApp-copyHome() {
 	if [[ ! -e "$globalFakeHome"/.config/dolphinrc ]]
 	then
 		_editFakeHome true
@@ -20036,22 +20056,27 @@ _panelApp-dolphin_editHome() {
 		mkdir -p "$globalFakeHome"/.kde
 		cp -a "$HOME"/.kde/. "$globalFakeHome"/.kde/
 		
-		#mkdir -p "$globalFakeHome"/.config
-		#cp -a "$HOME"/.config/dolphinrc "$globalFakeHome"/.config/
+		mkdir -p "$globalFakeHome"/.config
+		cp -a "$HOME"/.config/dolphinrc "$globalFakeHome"/.config/
 		
 		#_instance_internal "$globalFakeHome"/. "$actualFakeHome"/ > /dev/null 2>&1
 		
-		
-		sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.config/kdeglobals
-		sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.kde/share/config/kdeglobals
+		mkdir -p "$globalFakeHome"/.local/share/applications
+		cp -a "$scriptLib"/fileAssociations/*.desktop "$globalFakeHome"/.local/share/applications
 	fi
+}
+
+#"$HOME"/core/infrastructure/PanelBoard/_panel_place_app "$HOME"/core/infrastructure/PanelBoard/ubiquitous_bash.sh dolphin "$@"
+_dolphin_editFakeHome() {
+	_panelApp-copyHome
 	
-	sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.config/kdeglobals
-	sed -i 's/SingleClick=false/SingleClick=true/g' "$globalFakeHome"/.kde/share/config/kdeglobals
+	_panelApp-SingleClick_write
 	
-	export keepFakeHome="false"
-	export setFakeHome=true
-	_editFakeHome dolphin "$@"
+	#unset QT_QPA_PLATFORMTHEME
+	
+	#export keepFakeHome="false"
+	#export setFakeHome=true
+	_editFakeHome dolphin --new-window "$@"
 }
 
 

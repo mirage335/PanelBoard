@@ -161,7 +161,16 @@ _test_prog() {
 
 _setup_prog() {
 	# Specifically desirable to use relatively lean Ubiquitous Bash.
-	_setupUbiquitous_nonet
+	if [[ ! -e "$HOME"/.ubcore ]]
+	then
+		_editFakeHome "$scriptAbsoluteLocation" _setupUbiquitous_nonet
+	fi
+	
+	_messageNormal '_panelApp-copyHome'
+	_panelApp-copyHome
+	
+	_messageNormal '_panelApp-SingleClick_write'
+	_panelApp-SingleClick_write
 }
 
 

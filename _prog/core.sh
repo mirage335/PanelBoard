@@ -425,6 +425,10 @@ _panel_place_app_procedure() {
 		
 		#"$@" &
 		"${processedArgs[@]}" &
+		#disown -h $!
+		disown
+		disown -a -h -r
+		disown -a -r
 		
 		sleep 0.3
 		
@@ -594,7 +598,9 @@ _refresh_anchors() {
 	
 	cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_panel_files
 	
-	cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_panelApp-dolphin_editHome
+	# CAUTION: Needed for '_panel_place_app' to recognize the app for faster and more robust placement.
+	cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_dolphin_editFakeHome
+	#cp -a "$scriptAbsoluteFolder"/_anchor "$scriptAbsoluteFolder"/_panelApp-dolphin_editHome
 }
 
 

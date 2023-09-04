@@ -317,39 +317,8 @@ export scriptAbsoluteFolder=$(_getScriptAbsoluteFolder)
 
 ##### Entry
 
-_wsl_desktop-waitUp_wmctrl() {
-    while [[ $(wmctrl -d 2>/dev/null | wc -l) -lt 1 ]]
-    do
-        sleep 0.2
-    done
-}
-_wsl_desktop-waitDown_wmctrl() {
-    while [[ $(wmctrl -d 2>/dev/null | wc -l) -gt 1 ]]
-    do
-        sleep 0.4
-    done
-}
 
-
-for (( xephyrDisplay = 53 ; xephyrDisplay <= 79 ; xephyrDisplay++ ))
-do
-	! [[ -e /tmp/.X"$xephyrDisplay"-lock ]] && ! [[ -e /tmp/.X11-unix/X"$xephyrDisplay" ]] && xephyrDisplayValid="true" && _messagePlain_good 'found: unused X11 display= '"$xephyrDisplay" && break
-done
-
-_messagePlain_nominal 'Xephyr.'
-local xephyrResolution
-xephyrResolution="1600x1200"
-[[ "$1" == *"x"* ]] && xephyrResolution="$1"
-shift
-if type -p dbus-run-session > /dev/null 2>&1 && type -p startplasma-x11 > /dev/null 2>&1
-then
-	export -f _wsl_desktop-waitUp_wmctrl
-	export -f _wsl_desktop-waitDown_wmctrl
-	( Xephyr -screen "$xephyrResolution" :"$xephyrDisplay" & ( export DISPLAY=:"$xephyrDisplay" ; "$HOME"/core/installations/xclipsync/xclipsync & dbus-run-session startplasma-x11 2>/dev/null & sleep 0.1 ; _wsl_desktop-waitUp_wmctrl ; sleep 3 ; _set_qt5ct ; export LANG="C" ; "$@" ; _wsl_desktop-waitDown_wmctrl ; currentStopJobs=$(jobs -p -r 2> /dev/null) ; [[ "$displayStopJobs" != "" ]] && kill $displayStopJobs > /dev/null 2>&1 ) )
-	return 0
-	cd "$functionEntryPWD"
-fi
-
+echo 'Sorry! Not yet implemented. Code should be very similar to, if not same as, _wsl_desktop (ie. aka. 'ldesk') .
 
 
 
@@ -362,6 +331,7 @@ exit 1
 REM ##### Entry
 
 @echo on
+REM wslg.exe -d ubdist ~/.ubcore/ubiquitous_bash/ubiquitous_bash.sh _wrap "ldesk" "" "%~dp0panel.sh"
 wslg.exe -d ubdist ~/.ubcore/ubiquitous_bash/ubiquitous_bash.sh _wrap "ldesk" "" "%~dp0_panelManager.sh"
 
 
