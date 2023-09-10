@@ -26,6 +26,9 @@ _panelApp-copyHome() {
 		
 		mkdir -p "$globalFakeHome"/.local/share/applications
 		cp -a "$scriptLib"/fileAssociations/*.desktop "$globalFakeHome"/.local/share/applications
+		xdg-desktop-menu forceupdate
+		xdg-desktop-menu forceupdate --mode user
+		xdg-desktop-menu forceupdate --mode system
 	fi
 }
 
