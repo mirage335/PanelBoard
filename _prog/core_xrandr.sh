@@ -7,7 +7,7 @@ _xrandr_change_hash() {
 
 _xrandr_primary_string() {
 	#https://unix.stackexchange.com/questions/409650/how-to-get-monitor-width-using-xrandr-query
-	xrandr --query | grep 'primary\|default'
+	xrandr --query | sed 's/default/primary' | grep 'primary'
 }
 
 # ATTENTION: Override with 'ops' if necessary.
